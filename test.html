@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Resume Builder Test</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .container {
+        text-align: center;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 2rem;
+        border-radius: 1rem;
+        backdrop-filter: blur(10px);
+      }
+      .success {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+      }
+      .message {
+        font-size: 1.2rem;
+        margin-bottom: 2rem;
+      }
+      .button {
+        background: #10b981;
+        color: white;
+        padding: 1rem 2rem;
+        border: none;
+        border-radius: 0.5rem;
+        font-size: 1rem;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+      }
+      .button:hover {
+        background: #059669;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="success">✅ SUCCESS!</div>
+      <div class="message">
+        You are now using the correct HTML/CSS/JavaScript resume builder!<br />
+        This is NOT the React version.
+      </div>
+      <a href="index.html" class="button">Go to Resume Builder</a>
+
+      <div style="margin-top: 2rem; font-size: 0.9rem; opacity: 0.8">
+        If you can see this page, you're using the right files.
+      </div>
+    </div>
+  </body>
+</html>

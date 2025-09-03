@@ -1,0 +1,844 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Your Resume - ResumeBuilder Pro</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+      .form-page {
+        min-height: 100vh;
+        background: #f9fafb;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .form-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid #e5e7eb;
+        background: white;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+      }
+
+      .header-button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0.5rem;
+        border-radius: 0.5rem;
+        transition: background-color 0.2s ease;
+        color: #6b7280;
+      }
+
+      .header-button:hover {
+        background: #f3f4f6;
+      }
+
+      .form-container {
+        flex: 1;
+        padding: 2rem 1.5rem 8rem;
+        max-width: 800px;
+        margin: 0 auto;
+        width: 100%;
+      }
+
+      .resume-preview {
+        background: white;
+        border-radius: 1rem;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        padding: 2rem;
+        margin-bottom: 2rem;
+        min-height: 600px;
+        font-family: "Times New Roman", serif;
+        line-height: 1.5;
+      }
+
+      .resume-header {
+        text-align: center;
+        border-bottom: 2px solid #e5e7eb;
+        padding-bottom: 1rem;
+        margin-bottom: 2rem;
+      }
+
+      .resume-name {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #111827;
+        margin-bottom: 0.5rem;
+      }
+
+      .resume-contact {
+        color: #6b7280;
+        font-size: 0.875rem;
+        line-height: 1.4;
+      }
+
+      .resume-section {
+        margin-bottom: 2rem;
+      }
+
+      .section-title {
+        font-size: 1.25rem;
+        font-weight: bold;
+        color: #111827;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid #e5e7eb;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .resume-item {
+        margin-bottom: 1.5rem;
+      }
+
+      .item-title {
+        font-weight: 600;
+        color: #111827;
+        font-size: 1rem;
+      }
+
+      .item-company {
+        color: #6b7280;
+        font-size: 0.875rem;
+        margin-bottom: 0.25rem;
+      }
+
+      .item-date {
+        color: #9ca3af;
+        font-size: 0.75rem;
+        margin-bottom: 0.5rem;
+        font-style: italic;
+      }
+
+      .item-description {
+        color: #374151;
+        font-size: 0.875rem;
+        line-height: 1.5;
+      }
+
+      .skills-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+
+      .skill-item {
+        background: #f3f4f6;
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+        font-size: 0.875rem;
+        color: #374151;
+      }
+
+      .action-buttons {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        margin-bottom: 2rem;
+      }
+
+      .action-button {
+        padding: 1rem;
+        border: none;
+        border-radius: 0.75rem;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+      }
+
+      .download-button {
+        background: #3b82f6;
+        color: white;
+      }
+
+      .download-button:hover {
+        background: #2563eb;
+        transform: translateY(-1px);
+      }
+
+      .download-button:disabled {
+        background: #9ca3af;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .share-button {
+        background: white;
+        color: #374151;
+        border: 1px solid #d1d5db;
+      }
+
+      .share-button:hover {
+        background: #f9fafb;
+      }
+
+      .resume-stats {
+        background: #dbeafe;
+        border: 1px solid #93c5fd;
+        border-radius: 0.75rem;
+        padding: 1rem;
+        margin-bottom: 2rem;
+      }
+
+      .stats-title {
+        font-weight: 600;
+        color: #1e40af;
+        margin-bottom: 0.5rem;
+      }
+
+      .stats-list {
+        color: #1e40af;
+        font-size: 0.875rem;
+        line-height: 1.4;
+      }
+
+      .no-data {
+        text-align: center;
+        color: #6b7280;
+        font-style: italic;
+        padding: 2rem;
+      }
+
+      .loading {
+        text-align: center;
+        padding: 2rem;
+        color: #6b7280;
+      }
+
+      .error {
+        background: #fef2f2;
+        border: 1px solid #fecaca;
+        border-radius: 0.75rem;
+        padding: 1rem;
+        margin-bottom: 2rem;
+        color: #dc2626;
+      }
+
+      @media print {
+        .form-header,
+        .action-buttons,
+        .resume-stats {
+          display: none;
+        }
+
+        .form-container {
+          padding: 0;
+          max-width: none;
+        }
+
+        .resume-preview {
+          box-shadow: none;
+          margin: 0;
+          padding: 1rem;
+        }
+      }
+
+      .cert-item {
+        margin-bottom: 0.5rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="form-page">
+      <!-- Header -->
+      <div class="form-header">
+        <button class="header-button" onclick="window.history.back()">
+          <i class="fas fa-arrow-left"></i>
+        </button>
+        <h1 style="font-size: 1.125rem; font-weight: 600; color: #111827">
+          Your Resume
+        </h1>
+        <button
+          class="header-button"
+          onclick="window.location.href='index.html'"
+        >
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <!-- Form Content -->
+      <div class="form-container">
+        <!-- Loading State -->
+        <div id="loading" class="loading">
+          <i class="fas fa-spinner fa-spin" style="font-size: 2rem"></i>
+          <p>Generating your resume...</p>
+        </div>
+
+        <!-- Error State -->
+        <div id="errorState" class="error" style="display: none">
+          <h3 style="margin-bottom: 0.5rem">
+            <i class="fas fa-exclamation-triangle"></i>
+            Unable to Generate Resume
+          </h3>
+          <p id="errorMessage"></p>
+          <button
+            onclick="window.location.href='personal-info.html'"
+            style="
+              margin-top: 1rem;
+              padding: 0.5rem 1rem;
+              background: #3b82f6;
+              color: white;
+              border: none;
+              border-radius: 0.5rem;
+              cursor: pointer;
+            "
+          >
+            Start Over
+          </button>
+        </div>
+
+        <!-- Resume Stats -->
+        <div id="resumeStats" class="resume-stats" style="display: none">
+          <h3 class="stats-title">Resume Summary</h3>
+          <div class="stats-list" id="statsList"></div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div id="actionButtons" class="action-buttons" style="display: none">
+          <button
+            class="action-button download-button"
+            id="downloadBtn"
+            onclick="downloadPDF()"
+          >
+            <i class="fas fa-download"></i>
+            <span id="downloadText">Download PDF</span>
+          </button>
+          <button class="action-button share-button" onclick="shareResume()">
+            <i class="fas fa-share"></i>
+            Share Resume
+          </button>
+        </div>
+
+        <!-- Resume Preview -->
+        <div id="resumePreview" class="resume-preview" style="display: none">
+          <!-- Resume content will be generated here -->
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let resumeData = {};
+
+      document.addEventListener("DOMContentLoaded", function () {
+        setTimeout(() => {
+          loadResumeData();
+          generateResume();
+        }, 1000);
+      });
+
+      function loadResumeData() {
+        const savedData = localStorage.getItem("resumeBuilderData");
+        if (savedData) {
+          try {
+            resumeData = JSON.parse(savedData);
+            console.log("Loaded resume data:", resumeData);
+          } catch (e) {
+            console.error("Could not load saved data:", e);
+            resumeData = {};
+          }
+        }
+      }
+
+      function generateResume() {
+        if (!resumeData.personalInfo || !resumeData.personalInfo.firstName) {
+          showError(
+            "No personal information found. Please complete the form first.",
+          );
+          return;
+        }
+
+        const {
+          personalInfo,
+          experiences,
+          educations,
+          skills,
+          certifications,
+        } = resumeData;
+
+        // Generate resume HTML
+        const resumeHTML = `
+            <div class="resume-header">
+                <h1 class="resume-name">${personalInfo.firstName} ${personalInfo.lastName}</h1>
+                <div class="resume-contact">
+                    ${personalInfo.email} • ${personalInfo.phone}
+                    ${personalInfo.profile ? `<br><br><em>${personalInfo.profile}</em>` : ""}
+                </div>
+            </div>
+
+            ${
+              personalInfo.profile
+                ? `
+                <div class="resume-section">
+                    <h2 class="section-title">Professional Summary</h2>
+                    <p class="item-description">${personalInfo.profile}</p>
+                </div>
+            `
+                : ""
+            }
+
+            ${
+              experiences && experiences.length > 0
+                ? `
+                <div class="resume-section">
+                    <h2 class="section-title">Experience</h2>
+                    ${experiences
+                      .map(
+                        (exp) => `
+                        <div class="resume-item">
+                            <div class="item-title">${exp.jobTitle}</div>
+                            <div class="item-company">${exp.company} • ${exp.location}</div>
+                            <div class="item-date">${exp.dateRange}</div>
+                            ${exp.description ? `<div class="item-description">${exp.description}</div>` : ""}
+                        </div>
+                    `,
+                      )
+                      .join("")}
+                </div>
+            `
+                : ""
+            }
+
+            ${
+              educations && educations.length > 0
+                ? `
+                <div class="resume-section">
+                    <h2 class="section-title">Education</h2>
+                    ${educations
+                      .map(
+                        (edu) => `
+                        <div class="resume-item">
+                            <div class="item-title">${edu.degree}</div>
+                            <div class="item-company">${edu.institution}</div>
+                            <div class="item-date">${edu.startMonth} ${edu.year} - ${edu.endMonth} ${edu.year}</div>
+                        </div>
+                    `,
+                      )
+                      .join("")}
+                </div>
+            `
+                : ""
+            }
+
+            ${
+              skills && skills.length > 0
+                ? `
+                <div class="resume-section">
+                    <h2 class="section-title">Skills</h2>
+                    <div class="skills-grid">
+                        ${skills
+                          .map(
+                            (skill) => `
+                            <div class="skill-item">${skill.name}</div>
+                        `,
+                          )
+                          .join("")}
+                    </div>
+                </div>
+            `
+                : ""
+            }
+
+            ${
+              certifications && certifications.length > 0
+                ? `
+                <div class="resume-section">
+                    <h2 class="section-title">Certifications</h2>
+                    ${certifications
+                      .map(
+                        (cert) => `
+                        <div class="cert-item">
+                            <div class="item-title">• ${cert.name}</div>
+                        </div>
+                    `,
+                      )
+                      .join("")}
+                </div>
+            `
+                : ""
+            }
+        `;
+
+        // Show resume
+        document.getElementById("loading").style.display = "none";
+        document.getElementById("resumePreview").innerHTML = resumeHTML;
+        document.getElementById("resumePreview").style.display = "block";
+        document.getElementById("actionButtons").style.display = "grid";
+        document.getElementById("resumeStats").style.display = "block";
+
+        // Show stats
+        const stats = [
+          `• ${experiences ? experiences.length : 0} work experience(s)`,
+          `• ${educations ? educations.length : 0} education record(s)`,
+          `• ${skills ? skills.length : 0} skill(s)`,
+          `• ${certifications ? certifications.length : 0} certification(s)`,
+          `• Template: ${resumeData.selectedTemplate || "Modern Professional"}`,
+        ];
+
+        document.getElementById("statsList").innerHTML = stats.join("<br>");
+      }
+
+      function downloadPDF() {
+        const downloadBtn = document.getElementById("downloadBtn");
+        const downloadText = document.getElementById("downloadText");
+
+        // Disable button and show loading
+        downloadBtn.disabled = true;
+        downloadText.textContent = "Generating PDF...";
+
+        try {
+          const { jsPDF } = window.jspdf;
+          const pdf = new jsPDF();
+          const {
+            personalInfo,
+            experiences,
+            educations,
+            skills,
+            certifications,
+          } = resumeData;
+
+          // PDF styling
+          let yPosition = 20;
+          const lineHeight = 6;
+          const sectionSpacing = 10;
+          const pageWidth = 190;
+          const leftMargin = 20;
+
+          // Helper function to add text with word wrapping
+          function addText(
+            text,
+            x,
+            y,
+            maxWidth,
+            fontSize = 10,
+            fontStyle = "normal",
+          ) {
+            pdf.setFontSize(fontSize);
+            pdf.setFont("helvetica", fontStyle);
+            const lines = pdf.splitTextToSize(text, maxWidth);
+            pdf.text(lines, x, y);
+            return lines.length * lineHeight;
+          }
+
+          // Header
+          pdf.setFontSize(20);
+          pdf.setFont("helvetica", "bold");
+          pdf.text(
+            `${personalInfo.firstName} ${personalInfo.lastName}`,
+            leftMargin,
+            yPosition,
+          );
+          yPosition += 10;
+
+          pdf.setFontSize(10);
+          pdf.setFont("helvetica", "normal");
+          pdf.text(
+            `${personalInfo.email} • ${personalInfo.phone}`,
+            leftMargin,
+            yPosition,
+          );
+          yPosition += sectionSpacing;
+
+          // Professional Summary
+          if (personalInfo.profile) {
+            yPosition += addText(
+              "PROFESSIONAL SUMMARY",
+              leftMargin,
+              yPosition,
+              pageWidth,
+              12,
+              "bold",
+            );
+            yPosition += addText(
+              personalInfo.profile,
+              leftMargin,
+              yPosition,
+              pageWidth,
+            );
+            yPosition += sectionSpacing;
+          }
+
+          // Experience
+          if (experiences && experiences.length > 0) {
+            yPosition += addText(
+              "EXPERIENCE",
+              leftMargin,
+              yPosition,
+              pageWidth,
+              12,
+              "bold",
+            );
+
+            experiences.forEach((exp) => {
+              // Check if we need a new page
+              if (yPosition > 250) {
+                pdf.addPage();
+                yPosition = 20;
+              }
+
+              yPosition += addText(
+                exp.jobTitle,
+                leftMargin,
+                yPosition,
+                pageWidth,
+                11,
+                "bold",
+              );
+              yPosition += addText(
+                `${exp.company} • ${exp.location}`,
+                leftMargin,
+                yPosition,
+                pageWidth,
+                10,
+              );
+              yPosition += addText(
+                exp.dateRange,
+                leftMargin,
+                yPosition,
+                pageWidth,
+                9,
+              );
+
+              if (exp.description) {
+                yPosition += addText(
+                  exp.description,
+                  leftMargin,
+                  yPosition,
+                  pageWidth,
+                );
+              }
+              yPosition += 4;
+            });
+            yPosition += sectionSpacing;
+          }
+
+          // Education
+          if (educations && educations.length > 0) {
+            // Check if we need a new page
+            if (yPosition > 230) {
+              pdf.addPage();
+              yPosition = 20;
+            }
+
+            yPosition += addText(
+              "EDUCATION",
+              leftMargin,
+              yPosition,
+              pageWidth,
+              12,
+              "bold",
+            );
+
+            educations.forEach((edu) => {
+              yPosition += addText(
+                edu.degree,
+                leftMargin,
+                yPosition,
+                pageWidth,
+                11,
+                "bold",
+              );
+              yPosition += addText(
+                edu.institution,
+                leftMargin,
+                yPosition,
+                pageWidth,
+                10,
+              );
+              yPosition += addText(
+                `${edu.startMonth} ${edu.year} - ${edu.endMonth} ${edu.year}`,
+                leftMargin,
+                yPosition,
+                pageWidth,
+                9,
+              );
+              yPosition += 4;
+            });
+            yPosition += sectionSpacing;
+          }
+
+          // Skills
+          if (skills && skills.length > 0) {
+            // Check if we need a new page
+            if (yPosition > 240) {
+              pdf.addPage();
+              yPosition = 20;
+            }
+
+            yPosition += addText(
+              "SKILLS",
+              leftMargin,
+              yPosition,
+              pageWidth,
+              12,
+              "bold",
+            );
+            const skillsText = skills.map((skill) => skill.name).join(" • ");
+            yPosition += addText(skillsText, leftMargin, yPosition, pageWidth);
+            yPosition += sectionSpacing;
+          }
+
+          // Certifications
+          if (certifications && certifications.length > 0) {
+            // Check if we need a new page
+            if (yPosition > 240) {
+              pdf.addPage();
+              yPosition = 20;
+            }
+
+            yPosition += addText(
+              "CERTIFICATIONS",
+              leftMargin,
+              yPosition,
+              pageWidth,
+              12,
+              "bold",
+            );
+
+            certifications.forEach((cert) => {
+              yPosition += addText(
+                `• ${cert.name}`,
+                leftMargin,
+                yPosition,
+                pageWidth,
+                10,
+              );
+            });
+          }
+
+          // Save PDF
+          const fileName = `${personalInfo.firstName}_${personalInfo.lastName}_Resume.pdf`;
+          pdf.save(fileName);
+
+          showSuccessMessage("Resume downloaded successfully!");
+        } catch (error) {
+          console.error("Error generating PDF:", error);
+          showSuccessMessage(
+            "Error generating PDF. Please try using browser print (Ctrl+P) instead.",
+          );
+        } finally {
+          // Re-enable button
+          downloadBtn.disabled = false;
+          downloadText.textContent = "Download PDF";
+        }
+      }
+
+      function shareResume() {
+        const resumeText = `Check out my professional resume: ${personalInfo.firstName} ${personalInfo.lastName}`;
+
+        if (navigator.share) {
+          navigator
+            .share({
+              title: `${resumeData.personalInfo.firstName} ${resumeData.personalInfo.lastName} - Resume`,
+              text: resumeText,
+              url: window.location.href,
+            })
+            .then(() => {
+              showSuccessMessage("Resume shared successfully!");
+            })
+            .catch((error) => {
+              console.log("Error sharing:", error);
+              copyLinkToClipboard();
+            });
+        } else {
+          copyLinkToClipboard();
+        }
+      }
+
+      function copyLinkToClipboard() {
+        const resumeUrl = window.location.href;
+
+        if (navigator.clipboard) {
+          navigator.clipboard
+            .writeText(resumeUrl)
+            .then(() => {
+              showSuccessMessage("Resume link copied to clipboard!");
+            })
+            .catch(() => {
+              fallbackCopyToClipboard(resumeUrl);
+            });
+        } else {
+          fallbackCopyToClipboard(resumeUrl);
+        }
+      }
+
+      function fallbackCopyToClipboard(text) {
+        const textArea = document.createElement("textarea");
+        textArea.value = text;
+        document.body.appendChild(textArea);
+        textArea.select();
+        try {
+          document.execCommand("copy");
+          showSuccessMessage("Resume link copied to clipboard!");
+        } catch (err) {
+          showSuccessMessage(
+            "Unable to copy link automatically. Please copy manually: " + text,
+          );
+        }
+        document.body.removeChild(textArea);
+      }
+
+      function showError(message) {
+        document.getElementById("loading").style.display = "none";
+        document.getElementById("errorState").style.display = "block";
+        document.getElementById("errorMessage").textContent = message;
+      }
+
+      function showSuccessMessage(message) {
+        const toast = document.createElement("div");
+        toast.textContent = message;
+        toast.style.cssText = `
+                position: fixed;
+                top: 2rem;
+                right: 2rem;
+                background: #10b981;
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 0.5rem;
+                box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+                z-index: 1000;
+                animation: slideIn 0.3s ease-out;
+                max-width: 300px;
+                word-wrap: break-word;
+            `;
+
+        document.body.appendChild(toast);
+
+        setTimeout(() => {
+          toast.remove();
+        }, 4000);
+      }
+
+      // Add animation styles
+      const style = document.createElement("style");
+      style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+        `;
+      document.head.appendChild(style);
+
+      // Alternative print function
+      function printResume() {
+        window.print();
+      }
+    </script>
+  </body>
+</html>

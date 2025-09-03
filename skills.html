@@ -1,0 +1,511 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Skills & Certifications - ResumeBuilder Pro</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      .form-page {
+        min-height: 100vh;
+        background: white;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .form-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid #e5e7eb;
+        background: white;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+      }
+
+      .header-button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0.5rem;
+        border-radius: 0.5rem;
+        transition: background-color 0.2s ease;
+        color: #6b7280;
+      }
+
+      .header-button:hover {
+        background: #f3f4f6;
+      }
+
+      .save-button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+        transition: all 0.2s ease;
+        color: #3b82f6;
+        font-weight: 500;
+      }
+
+      .form-container {
+        flex: 1;
+        padding: 2rem 1.5rem 8rem;
+        max-width: 600px;
+        margin: 0 auto;
+        width: 100%;
+      }
+
+      .section-description {
+        color: #6b7280;
+        font-size: 1rem;
+        line-height: 1.6;
+        margin-bottom: 2rem;
+      }
+
+      .section-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #111827;
+        margin-bottom: 1rem;
+      }
+
+      .form-group {
+        margin-bottom: 2rem;
+      }
+
+      .form-input {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        background: #f3f4f6;
+        border: none;
+        border-radius: 0.75rem;
+        font-size: 1rem;
+        color: #111827;
+        transition: all 0.2s ease;
+        margin-bottom: 1rem;
+      }
+
+      .form-input:focus {
+        outline: none;
+        background: #e5e7eb;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+      }
+
+      .add-skill-button {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        width: 100%;
+        padding: 1rem;
+        background: #f9fafb;
+        border: 1px solid #e5e7eb;
+        border-radius: 0.75rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        margin-bottom: 2rem;
+      }
+
+      .add-skill-button:hover {
+        background: #f3f4f6;
+      }
+
+      .add-icon {
+        width: 2rem;
+        height: 2rem;
+        background: #e5e7eb;
+        border-radius: 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #6b7280;
+      }
+
+      .skill-item,
+      .cert-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: #f9fafb;
+        padding: 0.75rem 1rem;
+        border-radius: 0.5rem;
+        margin-bottom: 0.5rem;
+        border: 1px solid #e5e7eb;
+      }
+
+      .delete-btn {
+        background: #ef4444;
+        color: white;
+        border: none;
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.375rem;
+        font-size: 0.75rem;
+        cursor: pointer;
+      }
+
+      .delete-btn:hover {
+        background: #dc2626;
+      }
+
+      .continue-button {
+        width: 100%;
+        padding: 1rem;
+        background: #3b82f6;
+        color: white;
+        border: none;
+        border-radius: 0.75rem;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .continue-button:hover {
+        background: #2563eb;
+        transform: translateY(-1px);
+      }
+
+      .form-label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        color: #374151;
+        font-size: 0.875rem;
+      }
+
+      .add-button {
+        background: #3b82f6;
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        font-size: 0.875rem;
+        margin-top: 0.5rem;
+      }
+
+      .add-button:hover {
+        background: #2563eb;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="form-page">
+      <!-- Header -->
+      <div class="form-header">
+        <button class="header-button" onclick="window.history.back()">
+          <i class="fas fa-arrow-left"></i>
+        </button>
+        <h1 style="font-size: 1.125rem; font-weight: 600; color: #111827">
+          Skills & Certifications
+        </h1>
+        <button class="save-button" onclick="saveAndContinue()">Save</button>
+      </div>
+
+      <!-- Form Content -->
+      <div class="form-container">
+        <p class="section-description">
+          Add your skills and certifications. We'll help you with suggestions.
+        </p>
+
+        <!-- Skills Section -->
+        <div class="form-group">
+          <h2 class="section-title">Skills</h2>
+
+          <input
+            type="text"
+            id="skillInput"
+            class="form-input"
+            placeholder="Ex: Software Engineer, Product Manager"
+          />
+
+          <button class="add-button" onclick="addSkillFromInput()">
+            <i class="fas fa-plus"></i> Add Skill
+          </button>
+
+          <div id="skillsList" style="margin-top: 1rem"></div>
+
+          <button
+            type="button"
+            class="add-skill-button"
+            onclick="focusSkillInput()"
+          >
+            <div class="add-icon">
+              <i class="fas fa-plus"></i>
+            </div>
+            <div style="text-align: left">
+              <div style="font-weight: 500; color: #111827">Add a skill</div>
+              <div style="font-size: 0.875rem; color: #6b7280">Manage</div>
+              <div style="font-size: 0.875rem; color: #9ca3af">
+                Get started by adding a new skill
+              </div>
+            </div>
+          </button>
+        </div>
+
+        <!-- Certifications Section -->
+        <div class="form-group">
+          <h2 class="section-title">Certifications</h2>
+
+          <label class="form-label">Certification</label>
+          <input
+            type="text"
+            id="certInput"
+            class="form-input"
+            placeholder="Ex: Project Management"
+          />
+
+          <button class="add-button" onclick="addCertificationFromInput()">
+            <i class="fas fa-plus"></i> Add Certification
+          </button>
+
+          <div id="certsList" style="margin-top: 1rem"></div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div
+        style="
+          position: fixed;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          padding: 1rem 1.5rem;
+          background: white;
+          border-top: 1px solid #e5e7eb;
+        "
+      >
+        <button class="continue-button" onclick="saveAndContinue()">
+          Continue
+        </button>
+      </div>
+    </div>
+
+    <script>
+      let skills = [];
+      let certifications = [];
+
+      document.addEventListener("DOMContentLoaded", function () {
+        loadExistingData();
+        renderSkills();
+        renderCertifications();
+
+        // Add event listeners for Enter key
+        document
+          .getElementById("skillInput")
+          .addEventListener("keypress", function (e) {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              addSkillFromInput();
+            }
+          });
+
+        document
+          .getElementById("certInput")
+          .addEventListener("keypress", function (e) {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              addCertificationFromInput();
+            }
+          });
+      });
+
+      function loadExistingData() {
+        const savedData = localStorage.getItem("resumeBuilderData");
+        if (savedData) {
+          try {
+            const data = JSON.parse(savedData);
+            if (data.skills && Array.isArray(data.skills)) {
+              skills = data.skills;
+            }
+            if (data.certifications && Array.isArray(data.certifications)) {
+              certifications = data.certifications;
+            }
+          } catch (e) {
+            console.warn("Could not load saved data");
+          }
+        }
+      }
+
+      function saveData() {
+        let resumeData = {};
+        try {
+          const existing = localStorage.getItem("resumeBuilderData");
+          if (existing) {
+            resumeData = JSON.parse(existing);
+          }
+        } catch (e) {
+          console.warn("Could not parse existing data");
+        }
+
+        resumeData.skills = skills;
+        resumeData.certifications = certifications;
+        localStorage.setItem("resumeBuilderData", JSON.stringify(resumeData));
+        console.log("Saved skills:", skills, "certifications:", certifications);
+      }
+
+      function focusSkillInput() {
+        document.getElementById("skillInput").focus();
+      }
+
+      function addSkillFromInput() {
+        const input = document.getElementById("skillInput");
+        const skillName = input.value.trim();
+
+        if (skillName && !skills.find((s) => s.name === skillName)) {
+          const skill = {
+            id: Date.now(),
+            name: skillName,
+          };
+          skills.push(skill);
+          saveData();
+          renderSkills();
+          input.value = "";
+          showSuccessMessage("Skill added!");
+        } else if (skills.find((s) => s.name === skillName)) {
+          showSuccessMessage("Skill already exists!");
+        } else {
+          showSuccessMessage("Please enter a skill name!");
+        }
+      }
+
+      function addCertificationFromInput() {
+        const input = document.getElementById("certInput");
+        const certName = input.value.trim();
+
+        if (certName && !certifications.find((c) => c.name === certName)) {
+          const certification = {
+            id: Date.now(),
+            name: certName,
+          };
+          certifications.push(certification);
+          saveData();
+          renderCertifications();
+          input.value = "";
+          showSuccessMessage("Certification added!");
+        } else if (certifications.find((c) => c.name === certName)) {
+          showSuccessMessage("Certification already exists!");
+        } else {
+          showSuccessMessage("Please enter a certification name!");
+        }
+      }
+
+      function deleteSkill(id) {
+        if (confirm("Are you sure you want to remove this skill?")) {
+          skills = skills.filter((skill) => skill.id !== id);
+          saveData();
+          renderSkills();
+          showSuccessMessage("Skill removed!");
+        }
+      }
+
+      function deleteCertification(id) {
+        if (confirm("Are you sure you want to remove this certification?")) {
+          certifications = certifications.filter((cert) => cert.id !== id);
+          saveData();
+          renderCertifications();
+          showSuccessMessage("Certification removed!");
+        }
+      }
+
+      function renderSkills() {
+        const container = document.getElementById("skillsList");
+        if (skills.length === 0) {
+          container.innerHTML =
+            '<p style="color: #9ca3af; font-style: italic;">No skills added yet.</p>';
+          return;
+        }
+
+        container.innerHTML = skills
+          .map(
+            (skill) => `
+                <div class="skill-item">
+                    <span>${skill.name}</span>
+                    <button class="delete-btn" onclick="deleteSkill(${skill.id})">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            `,
+          )
+          .join("");
+      }
+
+      function renderCertifications() {
+        const container = document.getElementById("certsList");
+        if (certifications.length === 0) {
+          container.innerHTML =
+            '<p style="color: #9ca3af; font-style: italic;">No certifications added yet.</p>';
+          return;
+        }
+
+        container.innerHTML = certifications
+          .map(
+            (cert) => `
+                <div class="cert-item">
+                    <span>${cert.name}</span>
+                    <button class="delete-btn" onclick="deleteCertification(${cert.id})">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            `,
+          )
+          .join("");
+      }
+
+      function saveAndContinue() {
+        // Add any pending inputs
+        const skillInput = document.getElementById("skillInput").value.trim();
+        const certInput = document.getElementById("certInput").value.trim();
+
+        if (skillInput) {
+          addSkillFromInput();
+        }
+        if (certInput) {
+          addCertificationFromInput();
+        }
+
+        saveData();
+        window.location.href = "templates.html";
+      }
+
+      function showSuccessMessage(message) {
+        const toast = document.createElement("div");
+        toast.textContent = message;
+        toast.style.cssText = `
+                position: fixed;
+                top: 2rem;
+                right: 2rem;
+                background: #10b981;
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 0.5rem;
+                box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+                z-index: 1000;
+                animation: slideIn 0.3s ease-out;
+            `;
+
+        document.body.appendChild(toast);
+
+        setTimeout(() => {
+          toast.remove();
+        }, 3000);
+      }
+
+      // Add animation styles
+      const style = document.createElement("style");
+      style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+        `;
+      document.head.appendChild(style);
+    </script>
+  </body>
+</html>

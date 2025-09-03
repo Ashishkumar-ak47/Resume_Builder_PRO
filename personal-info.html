@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Personal Information - ResumeBuilder Pro</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      .form-page {
+        min-height: 100vh;
+        background: white;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .form-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid #e5e7eb;
+        background: white;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+      }
+
+      .header-button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0.5rem;
+        border-radius: 0.5rem;
+        transition: background-color 0.2s ease;
+        color: #6b7280;
+      }
+
+      .header-button:hover {
+        background: #f3f4f6;
+      }
+
+      .form-container {
+        flex: 1;
+        padding: 2rem 1.5rem 8rem;
+        max-width: 600px;
+        margin: 0 auto;
+        width: 100%;
+      }
+
+      .form-group {
+        margin-bottom: 1.5rem;
+      }
+
+      .form-label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        color: #374151;
+        font-size: 0.875rem;
+      }
+
+      .form-input {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        background: #f3f4f6;
+        border: none;
+        border-radius: 0.75rem;
+        font-size: 1rem;
+        color: #111827;
+        transition: all 0.2s ease;
+      }
+
+      .form-input:focus {
+        outline: none;
+        background: #e5e7eb;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+      }
+
+      .form-textarea {
+        resize: vertical;
+        min-height: 100px;
+      }
+
+      .form-footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 1rem 1.5rem;
+        background: white;
+        border-top: 1px solid #e5e7eb;
+      }
+
+      .continue-button {
+        width: 100%;
+        padding: 1rem;
+        background: #3b82f6;
+        color: white;
+        border: none;
+        border-radius: 0.75rem;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .continue-button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      .continue-button:not(:disabled):hover {
+        background: #2563eb;
+        transform: translateY(-1px);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="form-page">
+      <!-- Header -->
+      <div class="form-header">
+        <button class="header-button" onclick="window.history.back()">
+          <i class="fas fa-arrow-left"></i>
+        </button>
+        <h1 style="font-size: 1.125rem; font-weight: 600; color: #111827">
+          Personal Information
+        </h1>
+        <button
+          class="header-button"
+          onclick="window.location.href='index.html'"
+        >
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <!-- Form Content -->
+      <div class="form-container">
+        <form id="personalInfoForm">
+          <div class="form-group">
+            <label class="form-label" for="firstName">First Name</label>
+            <input
+              type="text"
+              id="firstName"
+              name="firstName"
+              class="form-input"
+              placeholder="Your first name"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="lastName">Last Name</label>
+            <input
+              type="text"
+              id="lastName"
+              name="lastName"
+              class="form-input"
+              placeholder="Your last name"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="email">Email Address</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              class="form-input"
+              placeholder="youremail@example.com"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="phone">Phone Number</label>
+            <input
+              type="tel"
+              id="phone"
+              name="phone"
+              class="form-input"
+              placeholder="(123) 456-7890"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="profile">Profile Summary</label>
+            <textarea
+              id="profile"
+              name="profile"
+              class="form-input form-textarea"
+              placeholder="A brief summary of your profile"
+              rows="4"
+            ></textarea>
+          </div>
+        </form>
+      </div>
+
+      <!-- Footer -->
+      <div class="form-footer">
+        <button
+          type="submit"
+          form="personalInfoForm"
+          class="continue-button"
+          id="continueBtn"
+          disabled
+        >
+          Continue
+        </button>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const form = document.getElementById("personalInfoForm");
+        const continueBtn = document.getElementById("continueBtn");
+        const requiredInputs = form.querySelectorAll("input[required]");
+
+        // Load existing data from localStorage
+        const savedData = localStorage.getItem("resumeBuilderData");
+        if (savedData) {
+          try {
+            const data = JSON.parse(savedData);
+            if (data.personalInfo) {
+              Object.keys(data.personalInfo).forEach((key) => {
+                const input = form.querySelector(`[name="${key}"]`);
+                if (input && data.personalInfo[key]) {
+                  input.value = data.personalInfo[key];
+                }
+              });
+            }
+          } catch (e) {
+            console.warn("Could not load saved data");
+          }
+        }
+
+        // Validate form
+        function validateForm() {
+          let isValid = true;
+          requiredInputs.forEach((input) => {
+            if (!input.value.trim()) {
+              isValid = false;
+            }
+          });
+
+          continueBtn.disabled = !isValid;
+        }
+
+        // Add event listeners
+        requiredInputs.forEach((input) => {
+          input.addEventListener("input", validateForm);
+        });
+
+        // Form submission
+        form.addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          // Collect form data
+          const formData = new FormData(form);
+          const personalInfo = {};
+          for (let [key, value] of formData.entries()) {
+            personalInfo[key] = value;
+          }
+
+          // Save to localStorage
+          let resumeData = {};
+          try {
+            const existing = localStorage.getItem("resumeBuilderData");
+            if (existing) {
+              resumeData = JSON.parse(existing);
+            }
+          } catch (e) {
+            console.warn("Could not parse existing data");
+          }
+
+          resumeData.personalInfo = personalInfo;
+          localStorage.setItem("resumeBuilderData", JSON.stringify(resumeData));
+
+          // Show success message
+          showSuccessMessage("Personal information saved successfully!");
+
+          // Redirect to experience page
+          setTimeout(() => {
+            window.location.href = "experience.html";
+          }, 1000);
+        });
+
+        // Show success message function
+        function showSuccessMessage(message) {
+          const toast = document.createElement("div");
+          toast.textContent = message;
+          toast.style.cssText = `
+                    position: fixed;
+                    top: 2rem;
+                    right: 2rem;
+                    background: #10b981;
+                    color: white;
+                    padding: 1rem 1.5rem;
+                    border-radius: 0.5rem;
+                    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+                    z-index: 1000;
+                    animation: slideIn 0.3s ease-out;
+                `;
+
+          document.body.appendChild(toast);
+
+          setTimeout(() => {
+            toast.remove();
+          }, 3000);
+        }
+
+        // Add animation styles
+        const style = document.createElement("style");
+        style.textContent = `
+                @keyframes slideIn {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+            `;
+        document.head.appendChild(style);
+
+        // Initial validation
+        validateForm();
+      });
+    </script>
+  </body>
+</html>
